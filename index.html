@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>KC Fire 14-1 Scavenger Hunt</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fire-red: #D42A20;
+    --fire-orange: #FF6B2B;
+    --fire-black: #1A1A1A;
+    --peach-bg: #FFF5EE;
+    --peach-mid: #FFE8D6;
+    --peach-dark: #FDDCC4;
+    --ember-glow: #FF4500;
+    --card-bg: #FFFFFF;
+    --flame-gradient: linear-gradient(135deg, var(--fire-red), var(--fire-orange));
+    --text-dark: #2D2018;
+    --text-mid: #6B5444;
+    --text-light: #9C8575;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--peach-bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .hero {
+    background: var(--fire-black);
+    padding: 2rem 1.5rem 2.8rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(212,42,32,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,107,43,0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(255,69,0,0.2) 0%, transparent 40%);
+    z-index: 0;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 28px;
+    background: var(--peach-bg);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    z-index: 2;
+  }
+  .hero > * { position: relative; z-index: 1; }
+  .team-badge {
+    display: inline-block;
+    background: var(--flame-gradient);
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.3rem 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 0.6rem;
+  }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.05;
+    animation: slideUp 0.5s ease-out;
+  }
+  .hero h1 .accent { color: var(--fire-orange); }
+  .hero .location {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 0.4rem;
+    letter-spacing: 1px;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .timer-bar {
+    background: var(--fire-black);
+    border-bottom: 3px solid var(--fire-red);
+    padding: 0.6rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .timer-left { display: flex; align-items: center; gap: 0.6rem; }
+  .timer {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+  }
+  .timer.warning { color: var(--fire-orange); animation: pulse 1s ease-in-out infinite; }
+  .timer.danger { color: var(--fire-red); animation: pulse 0.5s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+  .timer-btn {
+    background: var(--fire-red);
+    border: none;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .timer-btn:active { background: var(--ember-glow); }
+  .score-pill {
+    background: var(--flame-gradient);
+    color: white;
+    padding: 0.25rem 0.9rem;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
+  }
+  .content {
+    padding: 1.2rem 0.9rem 5rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .rules-card {
+    background: white;
+    border: 1px solid var(--peach-dark);
+    border-left: 4px solid var(--fire-orange);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .rules-card h2 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--fire-red);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+  .rule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+  .rule-icon { flex-shrink: 0; font-size: 0.85rem; }
+  .selfie-tip {
+    background: white;
+    border: 1px dashed var(--fire-orange);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .selfie-tip .tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+  .selfie-tip .tip-text { font-size: 0.78rem; color: var(--text-mid); line-height: 1.4; }
+  .selfie-tip .tip-text strong { color: var(--fire-orange); }
+  .section-header {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--fire-black);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 1.6rem 0 0.7rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid var(--peach-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .section-header .section-pts {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--fire-orange);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .task-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .task-card:active { transform: scale(0.98); }
+  .task-card.photo-card { border-left-color: var(--fire-red); }
+  .task-card.riddle-card { border-left-color: var(--fire-orange); }
+  .task-card.challenge-card { border-left-color: var(--fire-black); }
+  .task-card.bonus-card { border-left-color: #FFB300; }
+  .task-card.completed {
+    background: #EAFCE8;
+    opacity: 0.55;
+    transform: scale(0.97);
+  }
+  .task-card.completed .check-indicator { display: flex; }
+  .check-indicator {
+    display: none;
+    position: absolute;
+    top: 0; right: 0;
+    background: #4CAF50;
+    color: white;
+    width: 28px; height: 28px;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 800;
+    border-radius: 0 10px 0 8px;
+  }
+  .task-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.3rem;
+  }
+  .type-tag {
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.12rem 0.5rem;
+    border-radius: 3px;
+  }
+  .tag-photo { background: #FFEBEE; color: #C62828; }
+  .tag-riddle { background: #FFF3E0; color: #E65100; }
+  .tag-challenge { background: #F5F5F5; color: #333; }
+  .tag-bonus { background: #FFF8E1; color: #F57F17; }
+  .pts-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fire-red);
+  }
+  .task-title {
+    font-weight: 800;
+    font-size: 0.92rem;
+    margin-bottom: 0.2rem;
+    color: var(--fire-black);
+  }
+  .task-desc {
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    line-height: 1.45;
+  }
+  .task-desc .hint {
+    display: block;
+    margin-top: 0.25rem;
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 0.72rem;
+  }
+  .riddle-answer { margin-top: 0.4rem; }
+  .reveal-btn {
+    background: var(--fire-orange);
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.68rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .answer-text {
+    display: none;
+    font-size: 0.78rem;
+    color: var(--fire-red);
+    font-weight: 800;
+    margin-top: 0.25rem;
+  }
+  .answer-text.visible { display: block; }
+  .final-section {
+    background: var(--fire-black);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(255,107,43,0.15) 0%, transparent 60%);
+  }
+  .final-section > * { position: relative; }
+  .final-section h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    color: var(--fire-orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .final-section p {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    color: rgba(255,255,255,0.6);
+  }
+  .total-display {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: white;
+    margin-top: 0.3rem;
+  }
+  .total-display .total-max { font-size: 1.2rem; color: #666; }
+  .no-mall {
+    background: #FFF0E0;
+    border: 1px solid #FFDAB9;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fire-red);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .confetti { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+  .confetti.active { display: block; }
+  .confetti span {
+    position: absolute;
+    border-radius: 2px;
+    animation: confettiFall 3s ease-in forwards;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+  .flame-divider {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--peach-dark);
+    margin: 0.8rem 0;
+    letter-spacing: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="team-badge">KC Fire 14-1</div>
+  <h1>SCHEELS<br><span class="accent">SCAVENGER HUNT</span></h1>
+  <p class="location">📍 Wichita, KS — Towne East</p>
+</div>
+
+<div class="timer-bar">
+  <div class="timer-left">
+    <span class="timer" id="timer">45:00</span>
+    <button class="timer-btn" id="timerToggle" onclick="toggleTimer()">▶ START</button>
+  </div>
+  <div class="score-pill" id="scoreDisplay">0 PTS</div>
+</div>
+
+<div class="content">
+
+  <div class="rules-card">
+    <h2>🔥 Ground Rules</h2>
+    <div class="rule-item"><span class="rule-icon">📸</span> Photo or video proof required — tap a task to mark it done</div>
+    <div class="rule-item"><span class="rule-icon">👫</span> All 3 teammates in every photo (use timer or selfie mode!)</div>
+    <div class="rule-item"><span class="rule-icon">🚫</span> Stay INSIDE Scheels — do NOT enter the mall</div>
+    <div class="rule-item"><span class="rule-icon">😊</span> Be polite & respectful to everyone — represent KC Fire well!</div>
+    <div class="rule-item"><span class="rule-icon">🏆</span> Most points wins — coaches award bonus for creativity</div>
+  </div>
+
+  <div class="selfie-tip">
+    <span class="tip-icon">📱</span>
+    <div class="tip-text"><strong>PRO TIP:</strong> Set your phone camera to a 3-second timer and prop it on a shelf to get all 3 of you in the shot! Or use selfie mode and a long arm.</div>
+  </div>
+
+  <div class="no-mall">🚫 Reminder: Scheels only — the mall is off limits!</div>
+
+  <!-- PHOTO CHALLENGES -->
+  <div class="section-header">📸 Photo Challenges <span class="section-pts">5 pts each</span></div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">Welcome to Wichita!</div>
+    <div class="task-desc">Find the Wichita photo op sign at the front entrance. All 3 of you strike your best volleyball celebration pose — like you just won the championship point! 🏆</div>
+  </div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">Mannequin Challenge</div>
+    <div class="task-desc">Find a mannequin and recreate its EXACT pose. All 3 must match the same mannequin. Closest match wins bonus style points from the coaches!</div>
+  </div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">The Name Game</div>
+    <div class="task-desc">Find a store employee whose first name starts with the letter "A." Ask politely, take a photo with them, and give them a genuine compliment!
+    <span class="hint">Remember: be friendly and respectful — they're working!</span></div>
+  </div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">Shades & Lids</div>
+    <div class="task-desc">ALL 3 teammates pick out the wildest hat + sunglasses combo you can find. Put 'em on and take a group selfie serving your best red carpet looks! 😎</div>
+  </div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">Team Pyramid</div>
+    <div class="task-desc">Do your best 3-person pyramid pose (safely!) anywhere in the store. Creativity counts!</div>
+  </div>
+
+  <div class="task-card photo-card" onclick="toggleTask(this, 5)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-photo">📸 Photo</span>
+      <span class="pts-label">5 pts</span>
+    </div>
+    <div class="task-title">Puppy Pals</div>
+    <div class="task-desc">Find at least 2 dog mannequins (there are way more!) and pose with them like they're your beloved pets. Give your "dogs" names and introduce them to the camera in a quick video! 🐶
+    <span class="hint">+2 bonus pts for every dog mannequin beyond 2!</span></div>
+  </div>
+
+  <div class="flame-divider">🔥 🔥 🔥</div>
+
+  <!-- RIDDLES & FINDS -->
+  <div class="section-header">🧩 Riddles & Finds <span class="section-pts">10 pts each</span></div>
+
+  <div class="task-card riddle-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-riddle">🧩 Riddle</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Riddle #1 — Paddle Puzzle</div>
+    <div class="task-desc">"I stand taller than you and glide on water, but I have no engine and no sail. You ride me standing up, using only your arms to move. I come in many colors, and you'd find me at the beach or on a lake." Find me, then pose as if you're all riding the waves — and snap a photo with the most expensive one you can find!
+    <span class="hint">📸 Include the price tag in your photo!</span></div>
+    <div class="riddle-answer">
+      <button class="reveal-btn" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('visible');">Reveal Answer</button>
+      <div class="answer-text">A stand-up paddle board! 🏄</div>
+    </div>
+  </div>
+
+  <div class="task-card riddle-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-riddle">🧩 Riddle</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Riddle #2 — Kansas Icon</div>
+    <div class="task-desc">"I'm the official animal of this state. I roam the plains but you'll find me frozen in time here. Some people wear me, some people hang me on their walls, and there's even a stuffed version of me watching you." Find ALL the versions of me you can and take a photo with your favorite!
+    <span class="hint">Hint: Think about what Kansas is known for...</span></div>
+    <div class="riddle-answer">
+      <button class="reveal-btn" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('visible');">Reveal Answer</button>
+      <div class="answer-text">A buffalo / bison! 🦬 Find the taxidermy, paintings, photos, and merch!</div>
+    </div>
+  </div>
+
+  <div class="task-card riddle-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-riddle">🧩 Riddle</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Riddle #3 — Fly Without Wings</div>
+    <div class="task-desc">"I fly without wings. I hit without hands. You serve me, set me, and spike me into the sand." Find any version of me in the store and take a team photo doing your best pancake pose! 🥞
+    <span class="hint">(You know the one — flat on the floor, arm outstretched!)</span></div>
+    <div class="riddle-answer">
+      <button class="reveal-btn" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('visible');">Reveal Answer</button>
+      <div class="answer-text">A volleyball! 🏐</div>
+    </div>
+  </div>
+
+  <div class="flame-divider">🔥 🔥 🔥</div>
+
+  <!-- TEAM CHALLENGES -->
+  <div class="section-header">⚡ Team Challenges <span class="section-pts">10 pts each</span></div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Flock of Ducks</div>
+    <div class="task-desc">Find the duck decoys with the flapping wings. Record a video of all 3 of you doing your best duck wing-flap imitation next to them. Quacking is encouraged. 🦆</div>
+  </div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Pilot Mode</div>
+    <div class="task-desc">Find the model Cessna plane and take a photo of all 3 of you posing as a pilot and flight crew. Bonus points for the best "welcome aboard" announcement recorded on video! ✈️</div>
+  </div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Wildlife Encounter</div>
+    <div class="task-desc">Find the taxidermy wildlife scene. Each teammate picks a DIFFERENT animal (bear? fox? skunk?) and poses next to their chosen animal while the other two point it out like wildlife tour guides. You'll need a photo for each person's animal — 3 photos total! 🐻🦊🦨
+    <span class="hint">Bonus points if you narrate it like a nature documentary on video!</span></div>
+  </div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Jersey Math</div>
+    <div class="task-desc">Head to the sports jersey section. Find 3 different player jerseys whose numbers ADD UP to more than 120. Take a photo of all 3 jerseys together and be ready to show your math!
+    <span class="hint">e.g. #87 + #15 + #35 = 137 ✅ — get creative!</span></div>
+  </div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">WuShock It To Me</div>
+    <div class="task-desc">Find the 7-foot Lego statue of the Wichita State mascot. Take a team photo where all 3 of you recreate its pose as closely as possible. Most accurate match wins bragging rights! 🟡</div>
+  </div>
+
+  <div class="task-card challenge-card" onclick="toggleTask(this, 10)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-challenge">⚡ Challenge</span>
+      <span class="pts-label">10 pts</span>
+    </div>
+    <div class="task-title">Hidden Bowling Alley 🎳</div>
+    <div class="task-desc">Somewhere hidden in this store there's a secret 2-lane mini bowling alley. Your mission: FIND IT. Take a team photo or video proving you discovered it!
+    <span class="hint">It's well hidden — you'll have to explore! First team to find it gets 5 bonus pts!</span></div>
+  </div>
+
+  <div class="flame-divider">🔥 🔥 🔥</div>
+
+  <!-- BONUS ROUND -->
+  <div class="section-header">🌟 Bonus Round <span class="section-pts">15 pts each</span></div>
+
+  <div class="task-card bonus-card" onclick="toggleTask(this, 15)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-bonus">🌟 Bonus</span>
+      <span class="pts-label">15 pts</span>
+    </div>
+    <div class="task-title">The Team Cheer</div>
+    <div class="task-desc">Create and record a 10-second original team cheer that includes all 3 of your names AND "KC Fire." Perform it somewhere in the store (indoor voices!). Will be played for the whole team! 🔥</div>
+  </div>
+
+  <div class="task-card bonus-card" onclick="toggleTask(this, 15)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-bonus">🌟 Bonus</span>
+      <span class="pts-label">15 pts</span>
+    </div>
+    <div class="task-title">Secret Talent Show</div>
+    <div class="task-desc">Discover a hidden talent of one of your teammates that the rest of the team doesn't know about. Record a quick video of them showing it off (or describing it). Will be shared at the end!</div>
+  </div>
+
+  <div class="task-card bonus-card" onclick="toggleTask(this, 15)">
+    <div class="check-indicator">✓</div>
+    <div class="task-top">
+      <span class="type-tag tag-bonus">🌟 Bonus</span>
+      <span class="pts-label">15 pts</span>
+    </div>
+    <div class="task-title">Compliment Bomb 💛</div>
+    <div class="task-desc">Each teammate opens their phone Notes app and writes one genuine, specific compliment about each of the other two teammates. Screenshot it. These will be read aloud when everyone regroups!
+    <span class="hint">This is the best part — take it seriously!</span></div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="final-section">
+    <h2>🏁 Time's Up!</h2>
+    <p>Head back to the meeting spot with all your photos & videos ready to share!</p>
+    <div class="total-display" id="finalScore">0 <span class="total-max">/ 180</span></div>
+    <p style="margin-top: 0.6rem; font-size: 0.7rem; color: #555;">+ bonus creativity points awarded by coaches</p>
+  </div>
+
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script>
+  let totalSeconds = 45 * 60;
+  let timerRunning = false;
+  let timerInterval = null;
+  let score = 0;
+  const MAX_SCORE = 180;
+
+  function pad(n) { return n.toString().padStart(2, '0'); }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    const el = document.getElementById('timer');
+    el.textContent = pad(m) + ':' + pad(s);
+    el.classList.remove('warning', 'danger');
+    if (totalSeconds <= 120) el.classList.add('danger');
+    else if (totalSeconds <= 300) el.classList.add('warning');
+  }
+
+  function toggleTimer() {
+    const btn = document.getElementById('timerToggle');
+    if (!timerRunning) {
+      timerRunning = true;
+      btn.textContent = '⏸ PAUSE';
+      timerInterval = setInterval(function() {
+        if (totalSeconds > 0) {
+          totalSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          btn.textContent = '🏁 DONE';
+          launchConfetti();
+          if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        }
+      }, 1000);
+    } else {
+      timerRunning = false;
+      btn.textContent = '▶ START';
+      clearInterval(timerInterval);
+    }
+  }
+
+  function toggleTask(card, pts) {
+    if (card.classList.contains('completed')) {
+      card.classList.remove('completed');
+      score -= pts;
+    } else {
+      card.classList.add('completed');
+      score += pts;
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+    score = Math.max(0, score);
+    document.getElementById('scoreDisplay').textContent = score + ' PTS';
+    document.getElementById('finalScore').innerHTML = score + ' <span class="total-max">/ ' + MAX_SCORE + '</span>';
+  }
+
+  function launchConfetti() {
+    var container = document.getElementById('confetti');
+    container.classList.add('active');
+    var colors = ['#D42A20','#FF6B2B','#FFB300','#FFFFFF','#333333','#FF4500'];
+    for (var i = 0; i < 100; i++) {
+      var span = document.createElement('span');
+      span.style.left = Math.random() * 100 + '%';
+      span.style.background = colors[Math.floor(Math.random() * colors.length)];
+      span.style.animationDelay = Math.random() * 2 + 's';
+      span.style.width = (Math.random() * 8 + 4) + 'px';
+      span.style.height = (Math.random() * 8 + 4) + 'px';
+      container.appendChild(span);
+    }
+    setTimeout(function() { container.classList.remove('active'); container.innerHTML = ''; }, 4000);
+  }
+</script>
+
+</body>
+</html>
